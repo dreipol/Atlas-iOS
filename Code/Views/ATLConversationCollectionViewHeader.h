@@ -47,6 +47,11 @@ extern NSString *const ATLConversationViewHeaderIdentifier;
 @property (nonatomic) UIColor *participantLabelTextColor UI_APPEARANCE_SELECTOR;
 
 /**
+ @abstract The left padding for the participant label displayed in the header. Default is 60.
+ */
+@property (nonatomic) CGFloat participantLabelLeftPadding UI_APPEARANCE_SELECTOR;
+
+/**
  @abstract Displays a string of text representing a participant. The string will be horizontally aligned with
  the left edge of the message bubble view.
  @param participantName The string of text to be displayed.

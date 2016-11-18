@@ -25,6 +25,7 @@
 
 @property (nonatomic) UILabel *dateLabel;
 @property (nonatomic) UILabel *participantLabel;
+@property (nonatomic) NSLayoutConstraint* participantLabelLeftPaddingConstraint;
 
 @end
 
@@ -126,6 +127,12 @@ CGFloat const ATLConversationViewHeaderEmptyHeight = 1;
     self.participantLabel.textColor = participantLabelTextColor;
 }
 
+- (void)setParticipantLabelLeftPadding:(CGFloat)leftPadding
+{
+    _participantLabelLeftPaddingConstraint.constant = leftPadding;
+}
+
+
 + (CGFloat)headerHeightWithDateString:(NSAttributedString *)dateString participantName:(NSString *)participantName inView:(UIView *)view
 {
     if (!dateString && !participantName) return ATLConversationViewHeaderEmptyHeight;
@@ -172,7 +179,9 @@ CGFloat const ATLConversationViewHeaderEmptyHeight = 1;
 - (void)configureParticipantLabelConstraints
 {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-ATLConversationViewHeaderParticipantNameBottomPadding]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:ATLConversationViewHeaderParticipantLeftPadding]];
+    self.participantLabelLeftPaddingConstraint = [NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:ATLConversationViewHeaderParticipantLeftPadding];
+    [self addConstraint:_participantLabelLeftPaddingConstraint];
+
     
     // To work around an apparent system bug that initially requires the view to have zero width, instead of a required priority, we use a priority one higher than the content compression resistance.
     NSLayoutConstraint *participantLabelRightConstraint = [NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:-ATLConversationViewHeaderHorizontalPadding];
