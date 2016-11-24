@@ -23,6 +23,8 @@
 #import <MapKit/MapKit.h>
 #import "ATLParticipant.h"
 #import "ATLBaseConversationViewController.h"
+@class ATLConversationDataSource;
+
 
 typedef NS_ENUM(NSUInteger, ATLAvatarItemDisplayFrequency) {
     ATLAvatarItemDisplayFrequencySection,
@@ -218,6 +220,12 @@ NS_ASSUME_NONNULL_BEGIN
  @abstract The `LYRQueryController` object managing data displayed in the controller.
  */
 @property (nonatomic, readonly) LYRQueryController *queryController;
+
+/**
+ @abstract The `ATLConversationDataSource` offering convenience methods for the translation
+ of index objects
+ */
+@property (nonatomic, readonly) ATLConversationDataSource *conversationDataSource;
 
 /**
  @abstract The `ATLConversationViewControllerDelegate` class informs the receiver to specific events that occurred within the controller.
