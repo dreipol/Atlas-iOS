@@ -254,7 +254,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         }
     }
     
-    self.conversationDataSource = [ATLConversationDataSource dataSourceWithLayerClient:self.layerClient query:query];
+    self.conversationDataSource = [ATLConversationDataSource dataSourceWithLayerClient:self.layerClient query:query delegate:self];
     if (!self.conversationDataSource) {
         return;
     }

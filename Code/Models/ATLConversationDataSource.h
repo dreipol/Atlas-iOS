@@ -24,6 +24,17 @@
 extern NSInteger const ATLNumberOfSectionsBeforeFirstMessageSection;
 
 NS_ASSUME_NONNULL_BEGIN
+
+
+@protocol ConversationMoreMessageDelegate <NSObject>
+    
+- (BOOL)messagesAvailableRemotely;
+    
+@end
+
+
+
+
 /**
  @abstract The `ATLConversationDataSource` manages an `LYRQueryController` object whose data is displayed in an
  `ATLConversationViewController`. The `ATLConversationDataSource` also provides convenience methods for the translation 
@@ -44,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param query An `LYRQuery` object used as the query for the `queryController` property.
  @return An `ATLConversationDataSource` object.
  */
-+ (instancetype)dataSourceWithLayerClient:(LYRClient *)layerClient query:(LYRQuery *)query;
++ (instancetype)dataSourceWithLayerClient:(LYRClient *)layerClient query:(LYRQuery *)query delegate:(id<ConversationMoreMessageDelegate>)moreMessageDelegate;
 
 /**
  @abstract The `LYRQueryController` object managing data displayed in the `ATLConversationViewController`.

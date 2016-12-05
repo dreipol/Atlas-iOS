@@ -47,6 +47,7 @@ LYRConversation *LYRConversationDataSourceConversationFromPredicate(LYRPredicate
 @property (nonatomic, readwrite) LYRQueryController *queryController;
 @property (nonatomic, readwrite) BOOL expandingPaginationWindow;
 @property (nonatomic, readwrite) LYRConversation *conversation;
+@property (nonatomic, weak) id<ConversationMoreMessageDelegate> delegate;
 
 @end
 
@@ -55,15 +56,16 @@ LYRConversation *LYRConversationDataSourceConversationFromPredicate(LYRPredicate
 NSInteger const ATLNumberOfSectionsBeforeFirstMessageSection = 1;
 NSInteger const ATLQueryControllerPaginationWindow = 30;
 
-+ (instancetype)dataSourceWithLayerClient:(LYRClient *)layerClient query:(LYRQuery *)query
++ (instancetype)dataSourceWithLayerClient:(LYRClient *)layerClient query:(LYRQuery *)query delegate:(id<ConversationMoreMessageDelegate>)moreMessageDelegate
 {
-    return [[self alloc] initWithLayerClient:layerClient query:query];
+    return [[self alloc] initWithLayerClient:layerClient query:query delegate:moreMessageDelegate];
 }
 
 - (id)initWithLayerClient:(LYRClient *)layerClient query:(LYRQuery *)query
 {
     self = [super init];
     if (self) {
+        self.delegate = moreMessageDelegate;
         // Setting 0 for pagination causes messages in a new conversation to not display
         // A minimum of 1 ensures all messages display correctly
         NSUInteger numberOfMessagesAvailable = MAX(1, [layerClient countForQuery:query error:nil]);
@@ -146,7 +148,16 @@ NSInteger const ATLQueryControllerPaginationWindow = 30;
 
 - (NSUInteger)messagesAvailableRemotely
 {
-    return (NSUInteger)MAX((NSInteger)0, (NSInteger)self.conversation.totalNumberOfMessages - (NSInteger)ABS(self.queryController.count));
+    NSUInteger defaultRemoteMessage = (NSUInteger)MAX((NSInteger)0, (NSInteger)self.conversation.totalNumberOfMessages - (NSInteger)ABS(self.queryController.count));
+    if (!defaultRemoteMessage) {
+        return NO;
+    }
+    
+    if ([_delegate respondsToSelector:@selector(messagesAvailableRemotely)]) {
+        return [_delegate messagesAvailableRemotely];
+    } else {
+        return YES;
+    }
 }
 
 - (NSIndexPath *)queryControllerIndexPathForCollectionViewIndexPath:(NSIndexPath *)collectionViewIndexPath
