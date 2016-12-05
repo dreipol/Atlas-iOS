@@ -61,7 +61,7 @@ NSInteger const ATLQueryControllerPaginationWindow = 30;
     return [[self alloc] initWithLayerClient:layerClient query:query delegate:moreMessageDelegate];
 }
 
-- (id)initWithLayerClient:(LYRClient *)layerClient query:(LYRQuery *)query
+- (id)initWithLayerClient:(LYRClient *)layerClient query:(LYRQuery *)query delegate:(id<ConversationMoreMessageDelegate>)moreMessageDelegate
 {
     self = [super init];
     if (self) {
