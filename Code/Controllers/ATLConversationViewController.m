@@ -485,6 +485,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
     if ([self shouldDisplaySenderLabelForSection:indexPath.section]) {
         [header updateWithParticipantName:[self participantNameForMessage:message]];
+        [header setParticipantLabelTextColor:[self participantColorForMessage:message]];
     }
 }
 
@@ -1371,6 +1372,12 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
     return participantName;
 }
+
+- (UIColor *)participantColorForMessage:(LYRMessage *)message
+{
+    return [UIColor grayColor];
+}
+
 
 #pragma mark - NSNotification Center Registration
 
