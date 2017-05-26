@@ -1,16 +1,60 @@
 # Atlas Changelog
 
-## Unreleased
+## 1.1.0
+
+Introducing the presence feature, which allows you to display a user's presence status as a color-coded icon next to their avatar image. [APPS-2740]
+
+### Public API Changes
+
+* Added a new `ATLPresenceStatusView` object, which renders a color-coded circle to represent a user's presence status. Added this to the `ATLAvatarItem`.
+* `ATLAvatarImageView` was renamed to `ATLAvatarView`.
+* Added the `presenceStatusEnabled` property to `ATLAvatarView`, which sets whether the presence status is shown. Default is `YES`.
+* Added a read-only accessor `presenceStatus` to the `ATLAvatarItem`.
+
+## 1.0.33
+
+### Public API Changes
+
+* Added `shouldDisplayUsernameForOneOtherParticipant` as a configurable property to `ATLConversationViewController`.
+* `dateString` and `participantName` parameters marked as `nullable` within `ATLConversationCollectionViewHeader:headerHeightWithDateString:`.
+* Made the return value of `ATLConversationListViewController:avatarItemForConversation:` `nullable`.
+
+### Enhancements
+
+* Refactored queryController delegate methods to return early if the view is not visible. This helps harden against `NSInternalInconsistencyException` errors.
+* Refactored `ATLConversationListViewController` to track all changes from the queryController as they come in. Once the queryController finishes the changes, the tableView is updated. This helps harden against `NSInternalInconsistencyException` errors.
+* Changed all `@import LayerKit` to `#import <LayerKit/LayerKit.h>`
+* Refactored code to satisfy analyzer warnings.
+
+### Bug Fixes
+
+* `ATLConversationListViewController:configureCell:atIndexPath:` returns early if no conversation is found at `indexPath`.
+* Prevent `ATLAvatarImageView` from flickering when setting the same `remoteImageURL`'s image
+* Fixes a bug where the timestamp might incorrectly get overlaid across the message bubble.
+
+## 1.0.32
+
+### Bug Fixes
+
+* Fixed an issue in `ATLMessageInputToolbar` where creating a new line would incorrectly offset the text above until the next character was entered. This also fixed a crash that could happen if Return was pressed rapidly in succession. [APPS-2663]
+* Fixed a crash that could occur if the `tableFooterView` in the `ATLConversationListViewController` wasn't initialized. [APPS-2774]
+* Fixed an issue where pulling to load more messages in a conversations wouldn't work when it should
+
+## 1.0.31
 
 ### Enhancements
 
 * Replaced deprecated `UISearchDisplayController` with `UISearchController` in `ATLConversationListViewController`. This reduces complexity by removing the need to switch between different query controllers.
+* Replaced deprecated `UISearchDisplayController` with `UISearchController` in `ATLParticipantTableViewController`.
+* Updated some deprecated `NSCalendar` objects in `ATLConversationTableViewCell`.
 * Refactored `ATLConversationViewController` to harden against mismanagement and prevent common crashes and issues.
 
 ### Bug Fixes
 
+* Fixed an issue in `ATLConversationViewController` where the "more messages indicator" would continue to display and spin even if all messages had been synced. This was due to a mismatch between the total number of messages in a conversation and the total number of non-deleted messages for that user. [APPS-2629]
 * Fixed a pagination issue in `ATLConversationViewController` where, after navigating to a conversation, additional messages would not sync and the activity indicator would continue to spin until the user pulled down.
 * `ATLConversationListViewController` no longer filters out conversations the authenticated user was removed from. This allows the user to access the conversation and mark messages as read in order to have an accurate unread badge count.
+* Fixed a crash in `ATLAddressBarViewController` that could occur if a participant was selected while the `displayName` was `nil`. It will now appear as `Unknown Participant` instead.
 
 ## 1.0.30
 
